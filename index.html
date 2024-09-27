@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibel Quiz</title>
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#4CAF50">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(function() { console.log('Service Worker Registered'); });
+  }
+</script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #question, #answer {
+            margin: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bibel Quiz</h1>
+    <button id="btnAT">Altes Testament</button>
+    <button id="btnNT">Neues Testament</button>
+    <div id="question"></div>
+    <div id="bibleRef"></div>
+    <button id="btnAnswer">Lösung anzeigen</button>
+    <div id="answer"></div>
+
+    <script>
+        const data = {
+            "Altes Testament": [
+            {
+        "Frage": "zwei Musikinstrumente",
+        "Bibelstelle": "Ps 98,6",
+        "Antwort": "Trompeten und Hörner"
+      },
+      {
+        "Frage": "unechtes Körperteil",
+        "Bibelstelle": "Ps 120,3",
+        "Antwort": "falsche Zunge"
+      },
+      {
+        "Frage": "Was wird geöffnet",
+        "Bibelstelle": "Ps 78,2",
+        "Antwort": "Mund"
+      },
+      {
+        "Frage": "Wo wachsen die Bäume?",
+        "Bibelstelle": "Ps 72,16",
+        "Antwort": "Libanon"
+      },
+      {
+        "Frage": "Wie viele Männer?",
+        "Bibelstelle": "Hiob 32,1",
+        "Antwort": "3"
+      },
+      {
+        "Frage": "Mit wieviel Jahren wurde Zidkija König?",
+        "Bibelstelle": "2. Kön 24,18",
+        "Antwort": "21"
+      },
+      {
+        "Frage": "Kleine Vögel",
+        "Bibelstelle": "Ps 147,9",
+        "Antwort": "junge Raben"
+      },
+      {
+        "Frage": "Was regnet vom Himmel?",
+        "Bibelstelle": "Ps 78,27",
+        "Antwort": "Fleisch"
+      },
+      {
+        "Frage": "was kann schwimmen, obwohl es zu schwer dafür ist?",
+        "Bibelstelle": "2 Kön 6,6",
+        "Antwort": "Eisen"
+      },
+      {
+        "Frage": "Wie viele Steine suchte sich David?",
+        "Bibelstelle": "1 Sam 17,40",
+        "Antwort": "5"
+      },
+      {
+        "Frage": "Ein Getränk",
+        "Bibelstelle": "Joel 2, 19",
+        "Antwort": "Most"
+      },
+      {
+        "Frage": "Wie lange war Jona im Fisch?",
+        "Bibelstelle": "Jona 2,1",
+        "Antwort": "drei Tage und drei Nächte"
+      },
+      {
+        "Frage": "Wie heißen die drei Söhne Noachs?",
+        "Bibelstelle": "Gen 6,10",
+        "Antwort": "Sem, Ham, Jafet"
+      },
+      {
+        "Frage": "Wo singen die drei Jungen Männer?",
+        "Bibelstelle": "Dan 3,51",
+        "Antwort": "Ofen"
+      },
+      {
+        "Frage": "Wie viele Tage ruhen sie sich in Jerusalem aus?",
+        "Bibelstelle": "Esra 8,32",
+        "Antwort": "3"
+      },
+      {
+        "Frage": "Welche Früchte sind im Kuchen?",
+        "Bibelstelle": "1 Chr 12,41",
+        "Antwort": "Traubenkuchen"
+      },
+      {
+        "Frage": "Wo ist das Mehl? Wo ist das Öl?",
+        "Bibelstelle": "1 Kön 17,12",
+        "Antwort": "Topf, Krug"
+      },
+      {
+        "Frage": "Was wird hochgehoben, damit es nicht nass wird?",
+        "Bibelstelle": "Jes 47,2",
+        "Antwort": "Schleppe"
+      },
+      {
+        "Frage": "Was wird gesät?",
+        "Bibelstelle": "Hos 8,7",
+        "Antwort": "Wind"
+      },
+      {
+        "Frage": "Was bekommt Rut?",
+        "Bibelstelle": "Rut 4,13",
+        "Antwort": "einen Sohn"
+      },
+      {
+        "Frage": "Ein Tier",
+        "Bibelstelle": "Hab 3, 19",
+        "Antwort": "Hirsch"
+      },
+      {
+        "Frage": "Worin wird das Kleid gewaschen?",
+        "Bibelstelle": "Gen 49,11",
+        "Antwort": "Wein"
+      },
+      {
+        "Frage": "Welche Farbe hat das Gewand?",
+        "Bibelstelle": "Jes 63,2",
+        "Antwort": "rot"
+      },
+      {
+        "Frage": "Was ist süßer als Wein?",
+        "Bibelstelle": "Hld 1,2",
+        "Antwort": "Liebe"
+      },
+      {
+        "Frage": "Was wächst und wird immer mächtiger?",
+        "Bibelstelle": "Dan 4,8",
+        "Antwort": "Baum"
+      },
+      {
+        "Frage": "Wie viele Töchter hatte Rehabeam?",
+        "Bibelstelle": "2 Chr 11,21",
+        "Antwort": "60"
+      },
+      {
+        "Frage": "Eine Waffe",
+        "Bibelstelle": "Jer 5,12",
+        "Antwort": "Schwert"
+      },
+      {
+        "Frage": "Ein Kleidungsstück",
+        "Bibelstelle": "Ps 109,29",
+        "Antwort": "Mantel"
+      },
+      {
+        "Frage": "Was denkt Eli von Hanna?",
+        "Bibelstelle": "1 Sam 1,13",
+        "Antwort": "Er hält sie für betrunken"
+      },
+      {
+        "Frage": "Welche Frisur hatte Paulus?",
+        "Bibelstelle": "Apg 18,18",
+        "Antwort": "Glatze"
+      },
+      {
+        "Frage": "Wie viele Pferde?",
+        "Bibelstelle": "Jes 36,8",
+        "Antwort": "2000"
+      },
+      {
+        "Frage": "Ein Tier",
+        "Bibelstelle": "Dtn 9,16",
+        "Antwort": "Kalb"
+      },
+      {
+        "Frage": "Ein weibliches Tier",
+        "Bibelstelle": "Spr 17,12",
+        "Antwort": "Bärin"
+      },
+      {
+        "Frage": "Welche Farbe hat der Kranz?",
+        "Bibelstelle": "Offb 14,14",
+        "Antwort": "gold"
+      },
+      {
+        "Frage": "Wie schmeckt Manna?",
+        "Bibelstelle": "Ex 16,31",
+        "Antwort": "Honigkuchen/Semmel mit Honig"
+      },
+      {
+        "Frage": "Wie heißt der König von Baschan?",
+        "Bibelstelle": "Ps 135,11",
+        "Antwort": "Og"
+      },
+      {
+        "Frage": "Wie viele Monate lebt Elisabeth zurückgezogen?",
+        "Bibelstelle": "Lk 1,24",
+        "Antwort": "5"
+      },
+      {
+        "Frage": "Was reißen die anderen auf?",
+        "Bibelstelle": "Ps 35,21",
+        "Antwort": "Mund"
+      },
+      {
+        "Frage": "Woher kam Melatja?",
+        "Bibelstelle": "Neh 3,7",
+        "Antwort": "Gibeon"
+      },
+      {
+        "Frage": "Was zieht Josua aus?",
+        "Bibelstelle": "Jos 5,15",
+        "Antwort": "Schuhe"
+      },
+      {
+        "Frage": "Wie alt war Barsillai?",
+        "Bibelstelle": "2 Sam 19,33",
+        "Antwort": "80"
+      },
+      {
+        "Frage": "Von welchem Baum bekommt David Holz?",
+        "Bibelstelle": "1 Chronik 14,1",
+        "Antwort": "Zeder"
+      },
+      {
+        "Frage": "Wer sieht einen Engel?",
+        "Bibelstelle": "Num 22,23",
+        "Antwort": "Esel"
+      },
+      {
+        "Frage": "Welches Problem hat Jakob hier?",
+        "Bibelstelle": "Gen 32, 32",
+        "Antwort": "er hinkt"
+      },
+      {
+        "Frage": "Was wächst denn hier?",
+        "Bibelstelle": "Jona 4, 6",
+        "Antwort": "Rizinusstrauch"
+      },
+      {
+        "Frage": "Wer macht hier so einen Lärm?",
+        "Bibelstelle": "Am 3, 4",
+        "Antwort": "Löwe"
+      }
+                // Füge hier die restlichen Fragen hinzu
+            ],
+            "Neues Testament": [
+            {
+        "Frage": "Ein Tier",
+        "Bibelstelle": "Mt 26,74",
+        "Antwort": "ein Hahn"
+      },
+      {
+        "Frage": "An welchem Ort ist Paulus",
+        "Bibelstelle": "Phil 1,13",
+        "Antwort": "Gefängnis"
+      },
+      {
+        "Frage": "Was ist wuchtig und voll Kraft",
+        "Bibelstelle": "2Kor 10,10",
+        "Antwort": "Die Briefe"
+      },
+      {
+        "Frage": "Körperteile",
+        "Bibelstelle": "Mk 4,23",
+        "Antwort": "Ohren"
+      },
+      {
+        "Frage": "Eine Farbe",
+        "Bibelstelle": "Mt 23,27",
+        "Antwort": "Weiß"
+      },
+      {
+        "Frage": "Biblische Zahl",
+        "Bibelstelle": "Mk 1,13",
+        "Antwort": "40"
+      },
+      {
+        "Frage": "Grundnahrungsmittel",
+        "Bibelstelle": "Lk 11,3",
+        "Antwort": "Brot"
+      },
+      {
+        "Frage": "Macht man auch in der Schule",
+        "Bibelstelle": "Gal 6,11",
+        "Antwort": "Schreiben"
+      },
+      {
+        "Frage": "Braucht man auf dem Bau",
+        "Bibelstelle": "1 Thess 5,9",
+        "Antwort": "Helm"
+      },
+      {
+        "Frage": "Ist strafbar",
+        "Bibelstelle": "Hebr 10.34",
+        "Antwort": "Raub"
+      },
+      {
+        "Frage": "Eine Krankheit",
+        "Bibelstelle": "Mt 8,15",
+        "Antwort": "Fieber"
+      },
+      {
+        "Frage": "Wem gehört die zerfallene Hütte",
+        "Bibelstelle": "Apg 15,16",
+        "Antwort": "David"
+      },
+      {
+        "Frage": "Ein Gewürz",
+        "Bibelstelle": "Offb 18,13",
+        "Antwort": "Zimt"
+      },
+      {
+        "Frage": "Wie heißt das Kind",
+        "Bibelstelle": "Lk 1,31",
+        "Antwort": "Jesus"
+      },
+      {
+        "Frage": "Zwei Körperteile",
+        "Bibelstelle": "Mt 5,38",
+        "Antwort": "Auge , Zahn"
+      },
+      {
+        "Frage": "Häufige biblische Zahl",
+        "Bibelstelle": "Mt 4,2",
+        "Antwort": "40"
+      },
+      {
+        "Frage": "Angesehener Beruf",
+        "Bibelstelle": "Mk 2,17",
+        "Antwort": "Arzt"
+      },
+      {
+        "Frage": "Ist unangenehm",
+        "Bibelstelle": "Lk 22,24",
+        "Antwort": "Streit"
+      },
+      {
+        "Frage": "Was ist Gott",
+        "Bibelstelle": "1 Kor 1,9",
+        "Antwort": "Treu"
+      },
+      {
+        "Frage": "Was soll man ablegen",
+        "Bibelstelle": "Eph 4,25",
+        "Antwort": "Lüge"
+      },
+      {
+        "Frage": "Was fressen die Vögel",
+        "Bibelstelle": "Mk 4,4",
+        "Antwort": "Körner"
+      },
+      {
+        "Frage": "Was ist für Gott möglich",
+        "Bibelstelle": "Mt 19,26",
+        "Antwort": "Alles"
+      },
+      {
+        "Frage": "Ich kann es in der Küche finden",
+        "Bibelstelle": "Lk 11,41",
+        "Antwort": "Schüsseln"
+      },
+      {
+        "Frage": "In jedem Zimmer zu finden",
+        "Bibelstelle": "Joh 10,9",
+        "Antwort": "Tür"
+      },
+      {
+        "Frage": "Wie viel opfert die arme Witwe",
+        "Bibelstelle": "Mk 12,42",
+        "Antwort": "2 kl. Münzen"
+      },
+      {
+        "Frage": "Große Anzahl Soldaten",
+        "Bibelstelle": "Mt 26, 53",
+        "Antwort": "Legionen"
+      },
+      {
+        "Frage": "Kleine Lebewesen",
+        "Bibelstelle": "Lk 13 ,19",
+        "Antwort": "Vögel"
+      },
+      {
+        "Frage": "Brauchte jeder Ritter",
+        "Bibelstelle": "Eph 6,1",
+        "Antwort": "Rüstung"
+      },
+      {
+        "Frage": "Schlechte Eigenschaft",
+        "Bibelstelle": "Hebr 13,5",
+        "Antwort": "Habgier"
+      },
+      {
+        "Frage": "Sind aus Gold",
+        "Bibelstelle": "Jak 2,2",
+        "Antwort": "Ringe"
+      },
+      {
+        "Frage": "Welche Farbe hat der Kranz",
+        "Bibelstelle": "Offb 14,14",
+        "Antwort": "Gold"
+      },
+      {
+        "Frage": "Ein beliebtes Urlaubsland",
+        "Bibelstelle": "Röm 15,24",
+        "Antwort": "Spanien"
+      },
+      {
+        "Frage": "Häufiger Beruf zur Zeit Jesu",
+        "Bibelstelle": "Mt 13,48",
+        "Antwort": "Fischer"
+      },
+      {
+        "Frage": "Hohes Fest im Judentum",
+        "Bibelstelle": "Joh 13,1",
+        "Antwort": "Paschafest"
+      },
+      {
+        "Frage": "Großer, schwerer Gegenstand",
+        "Bibelstelle": "Mk 16,4",
+        "Antwort": "Stein"
+      },
+      {
+        "Frage": "Zeiteinheit",
+        "Bibelstelle": "Mk 14,37",
+        "Antwort": "Stunde"
+      },
+      {
+        "Frage": "Lasst darin nicht nach",
+        "Bibelstelle": "Kol 4,2",
+        "Antwort": "Beten"
+      },
+      {
+        "Frage": "Insel",
+        "Bibelstelle": "Tit 1,5",
+        "Antwort": "Kreta"
+      },
+      {
+        "Frage": "Letztes Wort im Petrusbrief",
+        "Bibelstelle": "1 Petr",
+        "Antwort": "Amen"
+      },
+      {
+        "Frage": "Kleines Naturwunder",
+        "Bibelstelle": "Offb 10,1",
+        "Antwort": "Regenbogen"
+      },
+      {
+        "Frage": "In jeder Wohnung zu finden",
+        "Bibelstelle": "Lk 22,14",
+        "Antwort": "Tisch"
+      },
+      {
+        "Frage": "Transportmittel",
+        "Bibelstelle": "Mk 1,20",
+        "Antwort": "Boot"
+      },
+      {
+        "Frage": "Bekommt man erst später",
+        "Bibelstelle": "Apg 7,54",
+        "Antwort": "Zähne"
+      },
+      {
+        "Frage": "Was werden sie gewinnen",
+        "Bibelstelle": "Lk 21,19",
+        "Antwort": "Das Leben"
+      },
+      {
+        "Frage": "Wichtiges Nahrungsmittel",
+        "Bibelstelle": "Mt 5,13",
+        "Antwort": "Salz"
+      },
+      {
+        "Frage": "Gegenstand aus Holz",
+        "Bibelstelle": "Mt 27,32",
+        "Antwort": "Kreuz"
+      },
+      {
+        "Frage": "Körperteil",
+        "Bibelstelle": "Mt 28,9",
+        "Antwort": "Füße"
+      },
+      {
+        "Frage": "Angeborene Behinderung",
+        "Bibelstelle": "Joh 9,1",
+        "Antwort": "Blindheit"
+      },
+      {
+        "Frage": "Geheimes Versteck",
+        "Bibelstelle": "LK 19,46",
+        "Antwort": "Räuberhöhle"
+      },
+      {
+        "Frage": "Die Liebe tut nichts …?",
+        "Bibelstelle": "Röm 13,10",
+        "Antwort": "Böses"
+      },
+      {
+        "Frage": "Bei uns als Drei Könige bekannt",
+        "Bibelstelle": "Mt2,1",
+        "Antwort": "Sterndeuter"
+      },
+      {
+        "Frage": "Hilfsmittel für Kranke",
+        "Bibelstelle": "MK 2,12",
+        "Antwort": "Tragbahre"
+      },
+      {
+        "Frage": "Stinkt",
+        "Bibelstelle": "Lk 14,35",
+        "Antwort": "Misthaufen"
+      },
+      {
+        "Frage": "Darauf kann man schreiben",
+        "Bibelstelle": "Joh 19,20",
+        "Antwort": "Schild"
+      },
+      {
+        "Frage": "Braucht man im Leben",
+        "Bibelstelle": "Apg 23,11",
+        "Antwort": "Mut"
+      },
+      {
+        "Frage": "Was war in den 7 Körben?",
+        "Bibelstelle": "Mk 8,8",
+        "Antwort": "Brot"
+      },
+      {
+        "Frage": "Leben am Bauernhof",
+        "Bibelstelle": "Lk 15,16",
+        "Antwort": "Schweine"
+      },
+      {
+        "Frage": "Gibt's vor den Ferien",
+        "Bibelstelle": "Joh 21,24",
+        "Antwort": "Zeugnis"
+      },
+      {
+        "Frage": "Gut, wenn man es nicht hat",
+        "Bibelstelle": "Apg 4,34",
+        "Antwort": "Not"
+      },
+      {
+        "Frage": "Zahl der Kapitel bei Mk",
+        "Bibelstelle": "Mk",
+        "Antwort": "16"
+      },
+      {
+        "Frage": "Lebenswichtiges Organ",
+        "Bibelstelle": "2Kor 9,7",
+        "Antwort": "Herz"
+      },
+      {
+        "Frage": "Sechste Frucht des Geistes",
+        "Bibelstelle": "Gal 5,22",
+        "Antwort": "Güte"
+      },
+      {
+        "Frage": "Sehr unbeliebt bei Schülern",
+        "Bibelstelle": "Lk 22,28",
+        "Antwort": "Prüfungen"
+      },
+      {
+        "Frage": "Man freut sich darüber",
+        "Bibelstelle": "Phil 3,7",
+        "Antwort": "Gewinn"
+      },
+      {
+        "Frage": "Lebensfeindlicher Ort",
+        "Bibelstelle": "Mk 1,3",
+        "Antwort": "Wüste"
+      },
+      {
+        "Frage": "Beruf im Freien",
+        "Bibelstelle": "Joh 10,11",
+        "Antwort": "Hirte"
+      },
+      {
+        "Frage": "Was hat geholfen",
+        "Bibelstelle": "Lk 17,19",
+        "Antwort": "Glaube"
+      },
+      {
+        "Frage": "Erstes Transportmittel Jesu",
+        "Bibelstelle": "Joh 12,14",
+        "Antwort": "Esel"
+      },
+      {
+        "Frage": "Letztes Wort im NT",
+        "Bibelstelle": "Offb",
+        "Antwort": "Allen"
+      },
+      {
+        "Frage": "Wie viele Verse hat Joh 6",
+        "Bibelstelle": "Joh",
+        "Antwort": "71 Verse"
+      },
+      {
+        "Frage": "Wie viel lässt er zurück",
+        "Bibelstelle": "Lk 15,4",
+        "Antwort": "99"
+      },
+      {
+        "Frage": "Man hat eine Menge davon",
+        "Bibelstelle": "Joh 20,27",
+        "Antwort": "Finger"
+      },
+      {
+        "Frage": "Isst man hier normal nicht",
+        "Bibelstelle": "Mt 3,4",
+        "Antwort": "Heuschrecken"
+      },
+      {
+        "Frage": "Babys brauchen eine Menge",
+        "Bibelstelle": "Lk 2,12",
+        "Antwort": "Windeln"
+      },
+      {
+        "Frage": "Gehen oft sehr weit",
+        "Bibelstelle": "Joh 12,20",
+        "Antwort": "Pilger"
+      },
+      {
+        "Frage": "Tier unter Naturschutz",
+        "Bibelstelle": "Joh 10,12",
+        "Antwort": "Wolf"
+      },
+      {
+        "Frage": "Kann man öffnen und schließen",
+        "Bibelstelle": "Lk 24,31",
+        "Antwort": "Augen"
+      },
+      {
+        "Frage": "Auch du bist es",
+        "Bibelstelle": "Mt 3,16",
+        "Antwort": "Getauft"
+      },
+      {
+        "Frage": "Es war am Anfang",
+        "Bibelstelle": "Joh 1,1",
+        "Antwort": "Das Wort"
+      },
+      {
+        "Frage": "Kürzestes Buch im NT",
+        "Bibelstelle": "--",
+        "Antwort": "Philemon"
+      },
+      {
+        "Frage": "Was heisst Tabita auf deutsch?",
+        "Bibelstelle": "Apg 9,36",
+        "Antwort": "Gazelle"
+      },
+      {
+        "Frage": "Worin sehen wir nur rätselhafte Umrisse?",
+        "Bibelstelle": "1 Kor 13,12",
+        "Antwort": "Spiegel"
+      },
+      {
+        "Frage": "Wer steht vor der Frau?",
+        "Bibelstelle": "Offb 12,4",
+        "Antwort": "Drache"
+      },
+      {
+        "Frage": "Wohin will Paulus hier reisen?",
+        "Bibelstelle": "Römer 15, 24",
+        "Antwort": "Spanien"
+      },
+      {
+        "Frage": "Ein Tier",
+        "Bibelstelle": "1 Petr 5,8",
+        "Antwort": "Löwe"
+      },
+      {
+        "Frage": "Welche Frucht kommt hier zur Sprache?",
+        "Bibelstelle": "Mk 11, 13",
+        "Antwort": "Feige"
+      },
+      {
+        "Frage": "Welcher Prophet wird hier genannt?",
+        "Bibelstelle": "Mt 3, 3",
+        "Antwort": "Jesaja"
+      },
+      {
+        "Frage": "Wer hat hier Angst?",
+        "Bibelstelle": "Joh 19, 8",
+        "Antwort": "Pilatus"
+      },
+      {
+        "Frage": "Wie heißt Agrippas Frau?",
+        "Bibelstelle": "Apg 25,23",
+        "Antwort": "Berenike"
+      },
+      {
+        "Frage": "Von welchem scharfen Werkzeug ist hier die Rede?",
+        "Bibelstelle": "Offb 14,18",
+        "Antwort": "Sichel"
+      },
+      {
+        "Frage": "Was sind Jesu Worte?",
+        "Bibelstelle": "Joh 6, 63",
+        "Antwort": "Geist und Leben"
+      },
+      {
+        "Frage": "Wie nennt sich Jesus hier?",
+        "Bibelstelle": "Joh 9,5",
+        "Antwort": "Licht (der Welt)"
+      },
+      {
+        "Frage": "Was gibt es zu tragen?",
+        "Bibelstelle": "Gal 6,2",
+        "Antwort": "Lasten"
+      },
+      {
+        "Frage": "Wie wird Jesus verglichen",
+        "Bibelstelle": "Eph 2,20",
+        "Antwort": "Eckstein"
+      },
+      {
+        "Frage": "Name einer Frau aus dem AT",
+        "Bibelstelle": "Hebr 11,21",
+        "Antwort": "Rahab"
+      },
+      {
+        "Frage": "Name einer Stadt (in Syrien)",
+        "Bibelstelle": "Apg 9,3",
+        "Antwort": "Damaskus"
+      },
+      {
+        "Frage": "Was kommt aus den Mäulern der Pferde?",
+        "Bibelstelle": "Offb 9,17",
+        "Antwort": "Feuer, Rauch, Schwefel"
+      },
+      {
+        "Frage": "Wie heißt der Sohn?",
+        "Bibelstelle": "Phlm 1,10",
+        "Antwort": "Onesimus"
+      },
+      {
+        "Frage": "Körperteil",
+        "Bibelstelle": "1. Petr 2,22",
+        "Antwort": "Mund"
+      },
+      {
+        "Frage": "Paar aus dem AT",
+        "Bibelstelle": "1. Petr. 3, 6",
+        "Antwort": "Sara und Abraham"
+      },
+      {
+        "Frage": "Was wird gejagt?",
+        "Bibelstelle": "1. Petr. 3, 11",
+        "Antwort": "Frieden"
+      },
+      {
+        "Frage": "Wieviele Menschen wurden in der Arche gerettet?",
+        "Bibelstelle": "1. Petr. 3,20",
+        "Antwort": "acht"
+      },
+      {
+        "Frage": "Gesucht ist ein Adjektiv (wie sollen wir sein?)",
+        "Bibelstelle": "1. Petr. 4, 9",
+        "Antwort": "gastfreundlich"
+      }
+                // Füge hier die restlichen Fragen hinzu
+            ]
+        };
+
+        let questionsAT = [];
+        let questionsNT = [];
+        let currentQuestion = null;
+
+        function initializeQuestions() {
+            questionsAT = shuffle([...data["Altes Testament"]]);
+            questionsNT = shuffle([...data["Neues Testament"]]);
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function getNextQuestion(questions) {
+            if (questions.length === 0) {
+                alert('Keine weiteren Fragen verfügbar!');
+                return null;
+            }
+            return questions.shift();
+        }
+
+        function showQuestion(question) {
+            document.getElementById('question').textContent = question.Frage;
+            document.getElementById('bibleRef').textContent = question.Bibelstelle;
+            document.getElementById('answer').textContent = '';
+            currentQuestion = question;
+        }
+
+        document.getElementById('btnAT').addEventListener('click', () => {
+            const question = getNextQuestion(questionsAT);
+            if (question) showQuestion(question);
+        });
+
+        document.getElementById('btnNT').addEventListener('click', () => {
+            const question = getNextQuestion(questionsNT);
+            if (question) showQuestion(question);
+        });
+
+        document.getElementById('btnAnswer').addEventListener('click', () => {
+            if (currentQuestion) {
+                document.getElementById('answer').textContent = currentQuestion.Antwort;
+            }
+        });
+
+        initializeQuestions();
+    </script>
+</body>
+</html>
